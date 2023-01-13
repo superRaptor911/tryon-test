@@ -23,5 +23,13 @@ module.exports = {
     project: ["./tsconfig.json"],
   },
   plugins: ["react"],
-  rules: {},
+  rules: {
+    "@typescript-eslint/no-throw-literal": "off",
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      {
+        checksVoidReturn: false,
+      },
+    ],
+  },
 };
