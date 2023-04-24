@@ -14,29 +14,24 @@ else
   set shortmess=aoO
 endif
 badd +1 App.tsx
-badd +14 components/VideoViewer.tsx
-badd +1 App.css
+badd +21 components/VideoViewer.tsx
+badd +3 App.css
 badd +1 main.tsx
-badd +4 index.css
-badd +1 scripts/Camera.ts
+badd +2 index.css
+badd +18 scripts/Camera.ts
+badd +46 scripts/videoPlayer.ts
+badd +14 scripts/movenet.ts
 argglobal
 %argdel
-edit components/VideoViewer.tsx
-wincmd t
-let s:save_winminheight = &winminheight
-let s:save_winminwidth = &winminwidth
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
+edit scripts/videoPlayer.ts
 argglobal
-balt scripts/Camera.ts
-let s:l = 14 - ((13 * winheight(0) + 18) / 37)
+balt scripts/movenet.ts
+let s:l = 46 - ((19 * winheight(0) + 18) / 36)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 14
-normal! 034|
+keepjumps 46
+normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -44,8 +39,6 @@ endif
 unlet! s:wipebuf
 set winheight=1 winwidth=20
 let &shortmess = s:shortmess_save
-let &winminheight = s:save_winminheight
-let &winminwidth = s:save_winminwidth
 let s:sx = expand("<sfile>:p:r")."x.vim"
 if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)

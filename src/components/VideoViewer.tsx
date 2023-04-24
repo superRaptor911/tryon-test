@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constant";
 import { setupCameraStream } from "../scripts/Camera";
 import { DisplayVideo } from "../scripts/videoPlayer";
 
@@ -19,7 +20,7 @@ const VideoViewer = () => {
     const gl = canvasRef.current.getContext("webgl2");
     if (gl == null) throw "Failed to get webgl2 context";
 
-    DisplayVideo(gl, videoEl, animationIdRef);
+    await DisplayVideo(gl, videoEl, animationIdRef);
   };
 
   useEffect(() => {
@@ -35,7 +36,10 @@ const VideoViewer = () => {
   return (
     <div>
       <video autoPlay ref={videoRef} style={{ width: 0, height: 0 }} />
-      <canvas ref={canvasRef} style={{ width: 1280, height: 720 }} />
+      <canvas
+        ref={canvasRef}
+        style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
+      />
     </div>
   );
 };
