@@ -10,7 +10,7 @@ import {
 } from "@super_raptor911/render3d";
 import { loadModel } from "@super_raptor911/webgl-gltf";
 import { Pose } from "@tensorflow-models/pose-detection";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constant";
+import { getScreenDim } from "../components/VideoViewer";
 import { applyBoneRotations } from "./math";
 import { initMovenet } from "./movenet";
 
@@ -31,6 +31,7 @@ const lineConfig = [
 ];
 
 const updateLines = (lines: Line[], pose: Pose): void => {
+  const [SCREEN_WIDTH, SCREEN_HEIGHT] = getScreenDim();
   let lineIdx = 0;
   lineConfig.forEach((config) => {
     for (let i = 0; i < config.length - 1; i++) {
@@ -47,12 +48,14 @@ const updateLines = (lines: Line[], pose: Pose): void => {
 };
 
 const getWidth = (pose: Pose): number => {
+  const [SCREEN_WIDTH, _] = getScreenDim();
   const left = pose.keypoints[11].x;
   const right = pose.keypoints[12].x;
   return -(right - left) / SCREEN_WIDTH;
 };
 
 const getPosePosition = (pose: Pose): [number, number] => {
+  const [SCREEN_WIDTH, SCREEN_HEIGHT] = getScreenDim();
   const x = (pose.keypoints[11].x + pose.keypoints[12].x) / (2 * SCREEN_WIDTH);
   const y = pose.keypoints[11].y / SCREEN_HEIGHT;
   return [x, y];
@@ -128,7 +131,7 @@ export const DisplayVideo = async (
       const scale = (width / 0.2) * 10;
       robot.setScale(scale, scale, scale);
       const posePos = getPosePosition(pose);
-      console.log(`y: ${posePos[1]}`);
+      // console.log(`y: ${posePos[1]}`);
       // robot.setPosition(0, -(posePos[1] - 1) / 0.25, 0);
       updateLines(lines, pose);
       if (pose.keypoints3D != null) {
