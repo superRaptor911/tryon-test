@@ -12,8 +12,8 @@ const VideoViewer = () => {
   const initVideoPlayer = async () => {
     if (videoRef.current == null || canvasRef.current == null) return;
 
-    canvasRef.current.width = 1280;
-    canvasRef.current.height = 720;
+    canvasRef.current.width = SCREEN_WIDTH;
+    canvasRef.current.height = SCREEN_HEIGHT;
 
     const videoEl = videoRef.current;
     await setupCameraStream(videoEl);
