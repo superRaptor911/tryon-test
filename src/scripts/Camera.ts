@@ -1,5 +1,7 @@
 const videoConfig = {
-  video: true,
+  video: {
+    facingMode: "environment",
+  },
 };
 
 export const setupCameraStream = async (
