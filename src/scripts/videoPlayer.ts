@@ -10,7 +10,6 @@ import {
 } from "@super_raptor911/render3d";
 import { loadModel } from "@super_raptor911/webgl-gltf";
 import { Pose } from "@tensorflow-models/pose-detection";
-import { ChangeEvent } from "react";
 import { getScreenDim } from "../components/VideoViewer";
 import { applyBoneRotations } from "./math";
 import { initMovenet } from "./movenet";
@@ -111,11 +110,10 @@ export const DisplayVideo = async (
   robot.setScale(10, 10, 10);
   robot.setPosition(0, -4.3, 0);
 
-  const input: HTMLInputElement | null = document.getElementById("xvii");
-
+  const input: any = document.getElementById("xvii");
   if (input != null) {
     input.valueAsNumber = 4.3;
-    input.onchange = (e: ChangeEvent<HTMLInputElement>) => {
+    input.onchange = (e: any) => {
       console.log(-e.target.valueAsNumber);
       robot.setPosition(0, -e.target.valueAsNumber, 0);
     };
@@ -143,7 +141,6 @@ export const DisplayVideo = async (
       const width = getWidth(pose);
       const scale = (width / 0.2) * 10;
       robot.setScale(scale, scale, scale);
-      // console.log(robot.position);
       const posePos = getPosePosition(pose);
       console.log(`y: ${posePos[1]}`);
       robot.setPosition(0, -(posePos[1] * 4.25), 0);
