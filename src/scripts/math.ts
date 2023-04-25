@@ -1,8 +1,8 @@
 import { Entity3D, Model } from "@super_raptor911/render3d";
 import { Keypoint } from "@tensorflow-models/pose-detection";
-import { mat4, quat, vec3 } from "gl-matrix";
+import { mat4, quat, vec2, vec3 } from "gl-matrix";
 
-export const calculateAngles = (point1: vec3, point2: vec3): vec3 => {
+export const calculateAngles3D = (point1: vec3, point2: vec3): vec3 => {
   // Calculate the vector from point1 to point2
   const v = vec3.subtract(vec3.create(), point2, point1);
 
@@ -20,10 +20,21 @@ export const calculateAngles = (point1: vec3, point2: vec3): vec3 => {
   return vec3.fromValues(phi, theta, psi);
 };
 
+export const calculateAngles2D = (point1: vec2, point2: vec2): number => {
+  // Calculate the vector from point1 to point2
+  const v = vec2.subtract(vec2.create(), point2, point1);
+  // Normalize the vector
+  vec2.normalize(v, v);
+  // Calculate the Euler angles
+  const phi = Math.atan2(v[1], v[0]);
+  return phi;
+};
+
 export const applyBoneRotations = (
   model: Model,
-  keypoints: Keypoint[]
-): void => {
+  keypoints: Keypoint[],
+  keypoints2D: Keypoint[]
+): number => {
   const rightShoulder = vec3.fromValues(
     keypoints[12].x,
     keypoints[12].y,
@@ -61,26 +72,33 @@ export const applyBoneRotations = (
   );
 
   // console.log(rightShoulder[2]);
-  const rtAng = calculateAngles(rightElbow, rightShoulder);
-  const rbAng = calculateAngles(rightHand, rightElbow);
+  const rtAng = calculateAngles3D(rightElbow, rightShoulder);
+  const rbAng = calculateAngles3D(rightHand, rightElbow);
 
-  const ltAng = calculateAngles(leftShoulder, leftElbow);
-  const lbAng = calculateAngles(leftElbow, leftHand);
+  const ltAng = calculateAngles3D(leftShoulder, leftElbow);
+  const lbAng = calculateAngles3D(leftElbow, leftHand);
+
+  const bodyAng = calculateAngles3D(rightShoulder, leftShoulder);
+
+  // console.log(`x: ${radToAngle(bodyAng[0])} y: ${radToAngle(bodyAng[1])}`);
 
   setBoneAbsoluteRotation(model.bones[3], rtAng[1], 1.54, 1.54 - rtAng[0]);
   setBoneAbsoluteRotation(model.bones[4], rbAng[1], 0, 1.54 - rbAng[0]);
 
   setBoneAbsoluteRotation(model.bones[6], -ltAng[1], -1.54, -(1.54 + ltAng[0]));
   setBoneAbsoluteRotation(model.bones[7], -lbAng[1], 0, -(1.54 + lbAng[0]));
+  model.setRotation(0, bodyAng[1], 0);
   model._bonesModified = true;
+
+  return bodyAng[1];
 };
 
 export const angleToRad = (angle: number): number => {
   return (angle * Math.PI) / 180;
 };
 
-export const radToAngle = (rad: number): number => {
-  return (rad * 180) / Math.PI;
+export const radToAngle = (rad: number): number | string => {
+  return ((rad * 180) / Math.PI).toFixed(2);
 };
 
 export const quatToEuler = (quat: quat): vec3 => {

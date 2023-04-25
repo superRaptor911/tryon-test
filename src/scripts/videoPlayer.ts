@@ -95,7 +95,9 @@ export const DisplayVideo = async (
   const model = await loadModel(gl, "models/base/jack.gltf");
   const robot = new Model(model);
 
-  const cam = new Camera3D(75, 640 / 480, false);
+  const [SCREEN_WIDTH, SCREEN_HEIGHT] = getScreenDim();
+
+  const cam = new Camera3D(75, SCREEN_WIDTH / SCREEN_HEIGHT, false);
   const modelRender = new ModelRenderer(gl, cam);
 
   const lines = createLines(33);
@@ -141,8 +143,7 @@ export const DisplayVideo = async (
     if (poses.length > 0) {
       const pose = poses[0];
       const width = getWidth(pose);
-      const scale = width * 14.772;
-      robot.setScale(scale, scale, scale);
+
       const posePos = getPosePosition(pose);
       // console.log(`x: ${posePos[0]}`);
       const posY = 1.1 - posePos[1] * 1.95;
@@ -150,9 +151,16 @@ export const DisplayVideo = async (
       // console.log(pos);
       robot.setPosition(posX, posY, 0);
       updateLines(lines, pose);
+
+      let cf = 1;
       if (pose.keypoints3D != null) {
-        applyBoneRotations(robot, pose.keypoints3D);
+        cf = applyBoneRotations(robot, pose.keypoints3D, pose.keypoints);
+        cf = Math.cos(1.1 * cf);
       }
+
+      const scale = Math.abs((width * 14.772) / cf);
+      console.log(scale);
+      robot.setScale(scale, scale, scale);
     }
 
     animationIdRef.current = requestAnimationFrame(draw);
