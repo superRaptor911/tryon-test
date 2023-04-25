@@ -32,6 +32,7 @@ const VideoViewer = () => {
     });
 
     return () => {
+      console.log("cancelAnimationFrame::", animationIdRef.current);
       cancelAnimationFrame(animationIdRef.current);
     };
   }, []);
@@ -43,6 +44,7 @@ const VideoViewer = () => {
         ref={canvasRef}
         // style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
       />
+      <input type="number" id="xvii" placeholder="ypos" step={0.05} />
     </div>
   );
 };

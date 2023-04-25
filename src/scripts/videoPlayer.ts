@@ -10,6 +10,7 @@ import {
 } from "@super_raptor911/render3d";
 import { loadModel } from "@super_raptor911/webgl-gltf";
 import { Pose } from "@tensorflow-models/pose-detection";
+import { ChangeEvent } from "react";
 import { getScreenDim } from "../components/VideoViewer";
 import { applyBoneRotations } from "./math";
 import { initMovenet } from "./movenet";
@@ -108,8 +109,19 @@ export const DisplayVideo = async (
   cam.translateY(0);
   // robot.translateX(3);
   robot.setScale(10, 10, 10);
-  robot.setPosition(0, -3, 0);
+  robot.setPosition(0, -4.3, 0);
 
+  const input: HTMLInputElement | null = document.getElementById("xvii");
+
+  if (input != null) {
+    input.valueAsNumber = 4.3;
+    input.onchange = (e: ChangeEvent<HTMLInputElement>) => {
+      console.log(-e.target.valueAsNumber);
+      robot.setPosition(0, -e.target.valueAsNumber, 0);
+    };
+  }
+
+  console.log("running");
   const draw = async (): Promise<void> => {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     updateTextureFromMedia(gl, texture, video);
@@ -125,14 +137,16 @@ export const DisplayVideo = async (
     modelRender.draw(robot);
     const timestamp = performance.now();
     const poses = await detector.estimatePoses(video, undefined, timestamp);
+
     if (poses.length > 0) {
       const pose = poses[0];
       const width = getWidth(pose);
       const scale = (width / 0.2) * 10;
       robot.setScale(scale, scale, scale);
+      // console.log(robot.position);
       const posePos = getPosePosition(pose);
-      // console.log(`y: ${posePos[1]}`);
-      // robot.setPosition(0, -(posePos[1] - 1) / 0.25, 0);
+      console.log(`y: ${posePos[1]}`);
+      robot.setPosition(0, -(posePos[1] * 4.25), 0);
       updateLines(lines, pose);
       if (pose.keypoints3D != null) {
         applyBoneRotations(robot, pose.keypoints3D);

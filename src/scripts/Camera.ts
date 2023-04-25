@@ -12,7 +12,7 @@ export const setupCameraStream = async (
 
   const videoStream = await navigator.mediaDevices.getUserMedia(videoConfig);
   const { width, height } = videoStream.getTracks()[0].getSettings();
-  console.log("videoStream");
+  console.log("videoStream", videoStream.getTracks().length);
   console.log(width, height); // 640x480
 
   videoElement.srcObject = videoStream;
