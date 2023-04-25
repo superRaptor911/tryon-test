@@ -40,11 +40,19 @@ const VideoViewer = () => {
   return (
     <div>
       <video autoPlay ref={videoRef} style={{ width: 0, height: 0 }} />
-      <canvas
-        ref={canvasRef}
-        // style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
-      />
-      <input type="number" id="xvii" placeholder="ypos" step={0.05} />
+      <canvas ref={canvasRef} />
+      <div>
+        <input type="number" id="ypos" placeholder="ypos" step={0.05} />
+        <input type="number" id="xpos" placeholder="xpos" step={0.05} />
+        <input
+          type="number"
+          id="scale"
+          placeholder="scale"
+          step={0.05}
+          min={1}
+        />
+        <input type="number" id="offset" placeholder="offset" step={0.05} />
+      </div>
     </div>
   );
 };

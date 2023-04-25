@@ -13,6 +13,7 @@ import { Pose } from "@tensorflow-models/pose-detection";
 import { getScreenDim } from "../components/VideoViewer";
 import { applyBoneRotations } from "./math";
 import { initMovenet } from "./movenet";
+import { InitParamController, IParamController } from "./parameterController";
 
 const createLines = (count: number): Line[] => {
   const lines: Line[] = [];
@@ -91,10 +92,10 @@ export const DisplayVideo = async (
 
   const detector = await initMovenet();
 
-  const model = await loadModel(gl, "models/base/human.gltf");
+  const model = await loadModel(gl, "models/base/human2.gltf");
   const robot = new Model(model);
 
-  const cam = new Camera3D();
+  const cam = new Camera3D(75, 640 / 480, false);
   const modelRender = new ModelRenderer(gl, cam);
 
   const lines = createLines(33);
@@ -104,22 +105,20 @@ export const DisplayVideo = async (
     line.setDepth(0.1);
   });
 
-  // cam.translateZ(3);
   cam.translateY(0);
   // robot.translateX(3);
-  robot.setScale(10, 10, 10);
-  robot.setPosition(0, -4.3, 0);
+  // robot.setScale(10, 10, 10);
+  // robot.setPosition(0, -4.3, 0);
+  //
+  const config: IParamController = {
+    xpos: 0,
+    ypos: 0,
+    scale: 1,
+    offset: 0,
+  };
 
-  const input: any = document.getElementById("xvii");
-  if (input != null) {
-    input.valueAsNumber = 4.3;
-    input.onchange = (e: any) => {
-      console.log(-e.target.valueAsNumber);
-      robot.setPosition(0, -e.target.valueAsNumber, 0);
-    };
-  }
+  InitParamController(config);
 
-  console.log("running");
   const draw = async (): Promise<void> => {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     updateTextureFromMedia(gl, texture, video);
@@ -136,14 +135,20 @@ export const DisplayVideo = async (
     const timestamp = performance.now();
     const poses = await detector.estimatePoses(video, undefined, timestamp);
 
+    // robot.setScale(config.scale, config.scale, config.scale);
+    // robot.setPosition(config.xpos, robot.position[1], 0);
+
     if (poses.length > 0) {
       const pose = poses[0];
       const width = getWidth(pose);
-      const scale = (width / 0.2) * 10;
+      const scale = width * 19.772;
       robot.setScale(scale, scale, scale);
       const posePos = getPosePosition(pose);
-      console.log(`y: ${posePos[1]}`);
-      robot.setPosition(0, -(posePos[1] * 4.25), 0);
+      console.log(`x: ${posePos[0]}`);
+      const posY = 1.1 - posePos[1] * 1.95;
+      const posX = -1.3 + posePos[0] * 2.6;
+      // console.log(pos);
+      robot.setPosition(posX, posY, 0);
       updateLines(lines, pose);
       if (pose.keypoints3D != null) {
         applyBoneRotations(robot, pose.keypoints3D);
