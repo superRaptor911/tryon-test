@@ -144,7 +144,7 @@ export const DisplayVideo = async (
       const scale = width * 14.772;
       robot.setScale(scale, scale, scale);
       const posePos = getPosePosition(pose);
-      console.log(`x: ${posePos[0]}`);
+      // console.log(`x: ${posePos[0]}`);
       const posY = 1.1 - posePos[1] * 1.95;
       const posX = -1.3 + posePos[0] * 2.6;
       // console.log(pos);
