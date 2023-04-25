@@ -92,7 +92,7 @@ export const DisplayVideo = async (
 
   const detector = await initMovenet();
 
-  const model = await loadModel(gl, "models/base/human2.gltf");
+  const model = await loadModel(gl, "models/base/jack.gltf");
   const robot = new Model(model);
 
   const cam = new Camera3D(75, 640 / 480, false);
@@ -141,7 +141,7 @@ export const DisplayVideo = async (
     if (poses.length > 0) {
       const pose = poses[0];
       const width = getWidth(pose);
-      const scale = width * 19.772;
+      const scale = width * 14.772;
       robot.setScale(scale, scale, scale);
       const posePos = getPosePosition(pose);
       console.log(`x: ${posePos[0]}`);

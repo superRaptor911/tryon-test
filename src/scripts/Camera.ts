@@ -1,6 +1,8 @@
 const videoConfig = {
   video: {
     facingMode: "environment",
+    width: { ideal: 1280 },
+    height: { ideal: 720 },
   },
 };
 
@@ -14,7 +16,6 @@ export const setupCameraStream = async (
 
   const videoStream = await navigator.mediaDevices.getUserMedia(videoConfig);
   const { width, height } = videoStream.getTracks()[0].getSettings();
-  console.log("videoStream", videoStream.getTracks().length);
   console.log(width, height); // 640x480
 
   videoElement.srcObject = videoStream;

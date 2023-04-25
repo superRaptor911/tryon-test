@@ -419,10 +419,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@super_raptor911/render3d@^0.1.16":
-  version "0.1.16"
-  resolved "https://registry.yarnpkg.com/@super_raptor911/render3d/-/render3d-0.1.16.tgz#ef29c62b65fc9f2336858763a12c58069df718dc"
-  integrity sha512-cFJ/dl0dpMTs/GXutrwmVnKh2de/tq6jA5LXmQIMGr9a5GemS6Tj3JN+MdEmU7+HQjEPCJQ9NFjrg+EoL8qDyw==
+"@super_raptor911/render3d@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@super_raptor911/render3d/-/render3d-0.2.2.tgz#47376d3fc8d7629f781e44c9b41d44ce2494202f"
+  integrity sha512-G2zDPhD6OfZ2saDNpyALcjQuvPl8Pe6uNv+EaVNHOMIu3/tdeRn+MGAXjfA6RsVLojv7dGGFovkWummBr5gYDg==
   dependencies:
     "@super_raptor911/webgl-gltf" "^0.3.5"
     gl-matrix "^3.4.3"

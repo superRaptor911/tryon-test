@@ -67,10 +67,10 @@ export const applyBoneRotations = (
   const ltAng = calculateAngles(leftShoulder, leftElbow);
   const lbAng = calculateAngles(leftElbow, leftHand);
 
-  setBoneAbsoluteRotation(model.bones[3], rtAng[1], 0, 1.54 - rtAng[0]);
+  setBoneAbsoluteRotation(model.bones[3], rtAng[1], 1.54, 1.54 - rtAng[0]);
   setBoneAbsoluteRotation(model.bones[4], rbAng[1], 0, 1.54 - rbAng[0]);
 
-  setBoneAbsoluteRotation(model.bones[6], -ltAng[1], 0, -(1.54 + ltAng[0]));
+  setBoneAbsoluteRotation(model.bones[6], -ltAng[1], -1.54, -(1.54 + ltAng[0]));
   setBoneAbsoluteRotation(model.bones[7], -lbAng[1], 0, -(1.54 + lbAng[0]));
   model._bonesModified = true;
 };
